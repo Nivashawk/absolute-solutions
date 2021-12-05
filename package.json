@@ -1,0 +1,28 @@
+{
+  "name": "absolute-solutions",
+  "version": "0.1.0",
+  "description": "water purifier company requires a self tracking system",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nivashawk/absolute-solutions.git"
+  },
+  "author": "Nivas",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Nivashawk/absolute-solutions/issues"
+  },
+  "homepage": "https://github.com/Nivashawk/absolute-solutions#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "mongodb": "^4.2.1",
+    "mongoose": "^6.0.14",
+    "validatorjs": "^3.22.1"
+  }
+}
