@@ -48,9 +48,24 @@ const CustomerSchema = mongoose.Schema
         type: String,
         require : true
     },
-    Images:
+    Service_List:
     {
         type: Array,
+        require : true
+    },
+    Profile_pic:
+    {
+        type: String,
+        require : true
+    },
+    Product_pic:
+    {
+        type: String,
+        require : true
+    },
+    Signature:
+    {
+        type: String,
         require : true
     }
 });

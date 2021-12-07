@@ -43,7 +43,7 @@ const create_customer = (req, res, next) => {
       Water_Purifier_Type: "required|string",
       Extra_Parts: "required|string"
     };
-    validator(req.body, validationRule, {}, (err, status) => {
+    validator(req.query, validationRule, {}, (err, status) => {
       if (!status) {
         res.status(200).send({
           code: 201,
