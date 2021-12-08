@@ -10,15 +10,15 @@ const s3 = new aws.S3({
     region : s3config.S3_BUCKET_REGION
 })
 
-const uploadS3 = () => multer({
+const uploadS3 = (bucket_name,folder_name, image_name) => multer({
     storage: multerS3({
       s3,
-      bucket: "absolute-solution-customers-images",
+      bucket: `${bucket_name}/customer_ id ${folder_name}`,
       metadata: function (req, file, cb) {
         cb(null, {fieldName: file.fieldname});
       },
       key: function (req, file, cb) {
-        cb(null, Date.now().toString())
+        cb(null, `${image_name} ${Date.now()}`)
       }
     })
   });

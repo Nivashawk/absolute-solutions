@@ -10,6 +10,7 @@ const login = (req, res, next) => {
   const validationRule = {
     Username: "required|string",
     Password: "required|string",
+    Notification_Token: "required|string"
   };
   validator(req.body, validationRule, {}, (err, status) => {
     if (!status) {
@@ -40,8 +41,8 @@ const create_customer = (req, res, next) => {
       Referer: "required|string",
       Price: "required|integer",
       Hand_Cash: "required|integer",
-      Water_Purifier_Type: "required|string",
-      Extra_Parts: "required|string"
+      Product_Item: "required|string",
+      Product_Discription: "required|string"
     };
     validator(req.query, validationRule, {}, (err, status) => {
       if (!status) {
@@ -99,11 +100,10 @@ const create_service = (req, res, next) => {
         Raw: "required|integer",
         Aro: "required|integer",
         Rejection_Rate: "required|integer",
-        Description: "required|string",
-        Water_Purifier_Type: "required|string",
-        Extra_Parts: "required|string"
+        Product_Item: "required|string",
+        Product_Discription: "required|string"
     };
-    validator(req.body, validationRule, {}, (err, status) => {
+    validator(req.query, validationRule, {}, (err, status) => {
       if (!status) {
         res.status(200).send({
           code: 201,
@@ -125,7 +125,7 @@ const create_service = (req, res, next) => {
 
 const search_service = (req, res, next) => {
     const validationRule = {
-      Service_id: "required|string",
+      Customer_id: "required|string",
     };
     validator(req.body, validationRule, {}, (err, status) => {
       if (!status) {

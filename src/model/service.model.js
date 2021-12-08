@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-const collectionName = "Service"
+const config = require("../config/server.config")
+const collectionName = config.SERVICE_COLLECTION
 
 const ServiceSchema = mongoose.Schema
 ({
@@ -58,24 +59,19 @@ const ServiceSchema = mongoose.Schema
         type: Number,
         require : true
     },
-    Description:
+    Product_Item:
     {
         type: String,
         require : true
     },
-    Water_Purifier_Type:
+    Product_Discription:
     {
         type: String,
         require : true
     },
-    Extra_Parts:
+    service_pic:
     {
         type: String,
-        require : true
-    },
-    Images:
-    {
-        type: Array,
         require : true
     }
 });

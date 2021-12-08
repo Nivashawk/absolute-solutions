@@ -34,6 +34,7 @@ db.once('open', () => {
 const admin = require('./src/route/admin.route')
 const customer = require('./src/route/customer.route')
 const service = require('./src/route/service.route')
+const schedule = require('./src/route/schedule.route')
 
 
 
@@ -48,6 +49,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/admin', admin)
 app.use('/customer', customer)
 app.use('/service', service)
+app.use('/schedule', schedule)
 
 
 

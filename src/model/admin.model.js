@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
-const collectionName = "Admin"
+const config = require("../config/server.config")
+const collectionName = config.ADMIN_COLLECTION
 
 const AdminSchema = mongoose.Schema
 ({
@@ -19,6 +20,11 @@ const AdminSchema = mongoose.Schema
         require : true
     },
     Desigination:
+    {
+        type: String,
+        require : true
+    },
+    Notification_Token:
     {
         type: String,
         require : true
