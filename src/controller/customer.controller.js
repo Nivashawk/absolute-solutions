@@ -21,6 +21,10 @@ const create = async (req, res) => {
         Name: req.query.Name,
         Phone_Number: req.query.Phone_Number,
         Address: req.query.Address,
+        Location:{
+          Latitude: req.query.Latitude,
+          Longitude: req.query.Longitude,
+        },
         Referer: req.query.Referer,
         Price: req.query.Password,
         Hand_Cash: req.query.Hand_Cash,

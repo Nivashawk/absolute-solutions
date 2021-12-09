@@ -38,6 +38,8 @@ const create_customer = (req, res, next) => {
       Name: "required|string",
       Phone_Number: "required|integer",
       Address: "required|string",
+      Latitude: "required|string",
+      Longitude: "required|string",
       Referer: "required|string",
       Price: "required|integer",
       Hand_Cash: "required|integer",
