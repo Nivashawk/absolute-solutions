@@ -4,6 +4,11 @@ const collectionName = config.SCHEDULE_COLLECTION
 
 const ScheduleSchema = mongoose.Schema
 ({
+    Title:
+    {
+        type: String,
+        require : true
+    },
     Message:
     {
         type: String,
@@ -11,7 +16,7 @@ const ScheduleSchema = mongoose.Schema
     },
     Date_And_Time:
     {
-        type: Date,
+        type: String,
         require : true
     }
 });

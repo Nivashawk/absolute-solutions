@@ -25,14 +25,15 @@ const create = async (req, res) => {
         Phone_Number: req.query.Phone_Number,
         Work_Done: req.query.Work_Done,
         Parts: req.query.Parts,
-        Price: req.query.Password,
+        Price: req.query.Price,
         Hand_Cash: req.query.Hand_Cash,
         Raw: req.query.Raw,
         Aro: req.query.Aro,
         Rejection_Rate: req.query.Rejection_Rate,
         Product_Item: req.query.Product_Item,
         Product_Discription: req.query.Product_Discription,
-        service_pic: req.files.service_pic[0].location,
+        Service_pic: req.files.service_pic[0].location,
+        Date: new Date().toISOString().split("T")[0]
       });
       try {
         const total_number_of_documents =
@@ -48,6 +49,7 @@ const create = async (req, res) => {
               {
                 $push: {
                   Service_List: {
+                    Service_id: req.query.Service_id,
                     Customer_id: req.query.Customer_id,
                     Name: req.query.Name,
                     Product_Item: req.query.Product_Item,
@@ -87,6 +89,7 @@ const create = async (req, res) => {
                 {
                   $push: {
                     Service_List: {
+                      Service_id: req.query.Service_id,
                       Customer_id: req.query.Customer_id,
                       Name: req.query.Name,
                       Product_Item: req.query.Product_Item,
@@ -125,50 +128,45 @@ const create = async (req, res) => {
 
 const service_list = async (req, res, next) => {
   try {
-    fields = { Customer_id: 1, service_pic: 1, Name: 1, Product_Item: 1 };
-    const { page = 1, limit = 10 } = req.body;
-    const result = await Servicemodel.find({})
-      .select(fields)
-      .limit(limit * 1)
-      .skip((page - 1) * limit);
-    // console.log(result);
-    res.status(200).json({
-      code: 200,
-      status: "success",
-      message: `list of all services fetched successfully`,
-      document_count: result.length,
-      result,
-    });
-  } catch (err) {
-    res.json({
-      code: 201,
-      status: "failure",
-      message: `Unknown Error Found From Server Side`,
-    });
-  }
-};
-
-// ### search services using service_id in the collection ###
-
-const service_search = async (req, res, next) => {
-  try {
-    fields = { Customer_id: 1, service_pic: 1, Name: 1, Product_Item: 1 };
-    query = { Customer_id: req.body.Customer_id };
-    const result = await Servicemodel.find(query).select(fields);
-    // console.log(result);
-    if (result.length !== 0) {
-      res.status(200).json({
-        code: 200,
-        status: "success",
-        message: `services fetched successfully`,
-        result,
-      });
+    fields = { Customer_id: 1, Service_id: 1, service_pic: 1, Name: 1, Product_Item: 1 };
+    const { page = 1, limit = 10, Customer_id} = req.body;
+    if (Customer_id === null || Customer_id === "") {
+      const result = await Servicemodel.find({})
+        .select(fields)
+        .limit(limit * 1)
+        .skip((page - 1) * limit);
+      if (result.length !== 0) {
+        res.status(200).json({
+          code: 200,
+          status: "success",
+          message: `list of all services fetched successfully`,
+          document_count: result.length,
+          result,
+        });
+      } else {
+        res.status(200).json({
+          code: 201,
+          status: "failure",
+          message: `no documents`,
+        });
+      }
     } else {
-      res.status(200).json({
-        code: 201,
-        status: "failure",
-        message: `no such service found`,
-      });
+      const result = await Servicemodel.find({Customer_id: req.body.Customer_id}).select(fields);
+      // console.log(result);
+      if (result.length !== 0) {
+        res.status(200).json({
+          code: 200,
+          status: "success",
+          message: `services fetched successfully`,
+          result,
+        });
+      } else {
+        res.status(200).json({
+          code: 201,
+          status: "failure",
+          message: `no such services found`,
+        });
+      }
     }
   } catch (err) {
     res.json({
@@ -183,7 +181,7 @@ const service_search = async (req, res, next) => {
 
 const service_detail = async (req, res, next) => {
   try {
-    query = { Customer_id: req.body.Customer_id };
+    query = { Service_id: req.body.Service_id };
     const result = await Servicemodel.find(query);
     // console.log(result);
     if (result.length !== 0) {
@@ -212,6 +210,5 @@ const service_detail = async (req, res, next) => {
 module.exports = {
   create,
   service_list,
-  service_search,
   service_detail,
 };

@@ -1,9 +1,14 @@
 const Customermodel = require("../model/customer.model");
 const uploadS3 = require("../helper/aws-s3-upload-images.helper");
-const config = require("../config/aws-s3.config")
+const config = require("../config/aws-s3.config");
+const { query } = require("express");
 
 const create = async (req, res) => {
-  const upload_img = uploadS3(config.S3_CUSTOMER_BUCKET_NAME, req.query.Customer_id, image_name = "customer").fields([
+  const upload_img = uploadS3(
+    config.S3_CUSTOMER_BUCKET_NAME,
+    req.query.Customer_id,
+    (image_name = "customer")
+  ).fields([
     { name: "profile_pic", maxCount: 1 },
     { name: "product_pic", maxCount: 1 },
     { name: "signature", maxCount: 1 },
@@ -21,19 +26,20 @@ const create = async (req, res) => {
         Name: req.query.Name,
         Phone_Number: req.query.Phone_Number,
         Address: req.query.Address,
-        Location:{
+        Location: {
           Latitude: req.query.Latitude,
           Longitude: req.query.Longitude,
         },
         Referer: req.query.Referer,
-        Price: req.query.Password,
+        Price: req.query.Price,
         Hand_Cash: req.query.Hand_Cash,
         Product_Item: req.query.Product_Item,
         Product_Discription: req.query.Product_Discription,
         Service_List: [],
         Profile_pic: req.files.profile_pic[0].location,
         Product_pic: req.files.product_pic[0].location,
-        Signature: req.files.signature[0].location
+        Signature: req.files.signature[0].location,
+        Date: new Date().toISOString().split("T")[0]
       });
       try {
         const total_number_of_documents =
@@ -83,56 +89,44 @@ const create = async (req, res) => {
 const customers_list = async (req, res, next) => {
   try {
     fields = { Customer_id: 1, Profile_pic: 1, Name: 1, Product_Item: 1 };
-    const { page = 1, limit = 10 } = req.body
-    const result = await Customermodel.find({}).select(fields).limit(limit * 1).skip((page - 1)*limit);
-    if(result.length !== 0){
-      res.status(200).json({
-        code: 200,
-        status: "success",
-        message: `list of all customers fetched successfully`,
-        document_count : result.length,
-        result
-        
-      });
-    }
-    else{
-      res.status(200).json({
-        code: 201,
-        status: "failure",
-        message: `no documents`,
-      });
-    }
-    
-  } catch (err) {
-    res.json({
-      code: 201,
-      status: "failure",
-      message: `Unknown Error Found From Server Side`,
-    });
-  }
-};
-
-// ### search customers using customer_id in the collection ###
-
-const customers_search = async (req, res, next) => {
-  try {
-    fields = { Customer_id: 1, Profile_pic: 1, Name: 1, Product_Item: 1 };
-    query = { Customer_id: req.body.Customer_id };
-    const result = await Customermodel.find(query).select(fields);
-    // console.log(result);
-    if (result.length !== 0) {
-      res.status(200).json({
-        code: 200,
-        status: "success",
-        message: `customers fetched successfully`,
-        result,
-      });
+    const { page = 1, limit = 10, Customer_id } = req.body;
+    if (Customer_id === null || Customer_id === "") {
+      const result = await Customermodel.find({})
+        .select(fields)
+        .limit(limit * 1)
+        .skip((page - 1) * limit);
+      if (result.length !== 0) {
+        res.status(200).json({
+          code: 200,
+          status: "success",
+          message: `list of all customers fetched successfully`,
+          document_count: result.length,
+          result,
+        });
+      } else {
+        res.status(200).json({
+          code: 201,
+          status: "failure",
+          message: `no documents`,
+        });
+      }
     } else {
-      res.status(200).json({
-        code: 201,
-        status: "failure",
-        message: `no such customer found`,
-      });
+      const result = await Customermodel.find({Customer_id: req.body.Customer_id}).select(fields);
+      // console.log(result);
+      if (result.length !== 0) {
+        res.status(200).json({
+          code: 200,
+          status: "success",
+          message: `customers fetched successfully`,
+          result,
+        });
+      } else {
+        res.status(200).json({
+          code: 201,
+          status: "failure",
+          message: `no such customer found`,
+        });
+      }
     }
   } catch (err) {
     res.json({
@@ -147,7 +141,7 @@ const customers_search = async (req, res, next) => {
 
 const customers_detail = async (req, res, next) => {
   try {
-    query = { Customer_id: req.body.Customer_id };
+    const query = { Customer_id: req.body.Customer_id };
     const result = await Customermodel.find(query);
     // console.log(result);
     if (result.length !== 0) {
@@ -176,6 +170,5 @@ const customers_detail = async (req, res, next) => {
 module.exports = {
   create,
   customers_list,
-  customers_search,
   customers_detail,
 };

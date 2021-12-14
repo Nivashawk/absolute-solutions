@@ -67,6 +67,10 @@ const CustomerSchema = mongoose.Schema({
     type: String,
     require: true,
   },
+  Date: {
+    type: String,
+    require: true,
+  }
 });
 
 const Customermodel = mongoose.model(

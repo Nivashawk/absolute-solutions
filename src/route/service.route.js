@@ -7,8 +7,7 @@ const validation = require("../middleware/validate.middleware")
 
 router.post('/create', validation.create_service, ServiceController.create)
 router.get('/list', ServiceController.service_list)
-router.get('/search', validation.search_service, ServiceController.service_search)
-router.get('/details', validation.search_service, ServiceController.service_detail)
+router.get('/details', ServiceController.service_detail)
 
 
 

@@ -69,10 +69,15 @@ const ServiceSchema = mongoose.Schema
         type: String,
         require : true
     },
-    service_pic:
+    Service_pic:
     {
         type: String,
         require : true
+    },
+    Date: 
+    {
+        type: String,
+        require: true
     }
 });
 
