@@ -7,8 +7,8 @@ const validation = require("../middleware/validate.middleware")
 
 
 router.post('/create', validation.create_customer, CustomerController.create)
-router.get('/list', CustomerController.customers_list)
-router.get('/details', CustomerController.customers_detail)
+router.post('/list', CustomerController.customers_list)
+router.post('/details', CustomerController.customers_detail)
 
 
 
