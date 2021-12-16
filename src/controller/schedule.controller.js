@@ -1,4 +1,4 @@
-const scheduleModel = require("../model/schedule.model");
+const ScheduleModel = require("../model/schedule.model");
 // const schedule_message = require("node-schedule");
 // const cron = require("node-cron");
 const Agenda = require("agenda");
@@ -27,7 +27,7 @@ agenda.define("test", function () {
 
 // ### schedule api handled here ###
 const schedule = async (req, res) => {
-  //   const schedule_doc = new Schedulemodel({
+  //   const schedule_doc = new ScheduleModel({
   //     Title: req.body.Title,
   //     Message: req.body.Message,
   //     Date_And_Time: req.body.Date_And_Time,

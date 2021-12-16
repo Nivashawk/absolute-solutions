@@ -1,4 +1,4 @@
-const customerModel = require("../model/customer.model");
+const CustomerModel = require("../model/customer.model");
 const uploadS3 = require("../helper/aws-s3-upload-images.helper");
 const config = require("../config/aws-s3.config");
 const baseController = require("./base.controller");
@@ -21,7 +21,7 @@ const create = async (req, res) => {
       const responseObject = response.error(messageResponse.uploadImage(err));
       return res.status(200).json(responseObject);
     } else {
-      const customer = new customerModel({
+      const customer = new CustomerModel({
         customerId: req.query.customerId,
         name: req.query.name,
         phoneNumber: req.query.phoneNumber,
@@ -43,13 +43,13 @@ const create = async (req, res) => {
       });
       const baseHandler = async () => {
         const totalNumberOfDocuments =
-          await customerModel.estimatedDocumentCount();
+          await CustomerModel.estimatedDocumentCount();
         if (totalNumberOfDocuments === 0) {
           await customer.save();
           const responseObject = response.success(messageResponse.Insert);
           return res.status(200).json(responseObject);
         } else {
-          const findDocumentWithUserId = await customerModel.find(
+          const findDocumentWithUserId = await CustomerModel.find(
             query.findCustomer(req.query.customerId)
           );
           if (findDocumentWithUserId.length !== 0) {
@@ -76,7 +76,7 @@ const customersList = async (req, res) => {
     fields = { customerId: 1, profilePic: 1, name: 1, productItem: 1 };
     const { page = 1, limit = 10, customerId } = req.body;
     if (customerId === null || customerId === "") {
-      const result = await customerModel
+      const result = await CustomerModel
         .find({})
         .select(fields)
         .limit(limit * 1)
@@ -95,7 +95,7 @@ const customersList = async (req, res) => {
         res.status(200).json(responseObject);
       }
     } else {
-      const result = await customerModel
+      const result = await CustomerModel
         .find(query.findCustomer(req.body.customerId))
         .select(fields);
       if (result.length !== 0) {
@@ -119,7 +119,7 @@ const customersList = async (req, res) => {
 
 const customersDetail = async (req, res) => {
   const baseHandler = async () => {
-    const result = await customerModel.find(
+    const result = await CustomerModel.find(
       query.findCustomer(req.body.customerId)
     );
     if (result.length !== 0) {

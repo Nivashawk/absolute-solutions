@@ -1,4 +1,4 @@
-const adminModel = require("../model/admin.model");
+const AdminModel = require("../model/admin.model");
 const baseController = require("./base.controller");
 const response = require("../response/response");
 const messageResponse = require("../response/messages");
@@ -7,7 +7,7 @@ const query = require("../model/query");
 // ### create Admin document ###
 
 const create = async (req, res) => {
-  const admin = new adminModel({
+  const admin = new AdminModel({
     userId: req.body.userId,
     name: req.body.name,
     phoneNumber: req.body.phoneNumber,
@@ -17,13 +17,13 @@ const create = async (req, res) => {
     notificationToken: "",
   });
   const baseHandler = async () => {
-    const totalNumberOfDocuments = await adminModel.estimatedDocumentCount();
+    const totalNumberOfDocuments = await AdminModel.estimatedDocumentCount();
     if (totalNumberOfDocuments === 0) {
       await admin.save();
       const responseObject = response.success(messageResponse.Insert);
       return res.status(200).json(responseObject);
     } else {
-      const findDocumentWithUserId = await adminModel.find(
+      const findDocumentWithUserId = await AdminModel.find(
         query.findUser(req.body.userId)
       );
       if (findDocumentWithUserId.length !== 0) {
@@ -45,16 +45,16 @@ const create = async (req, res) => {
 
 const login = async (req, res) => {
   const baseHandler = async () => {
-    const totalNumberOfDocuments = await adminModel.estimatedDocumentCount();
+    const totalNumberOfDocuments = await AdminModel.estimatedDocumentCount();
     if (totalNumberOfDocuments === 0) {
       const responseObject = response.error(messageResponse.emptyDatabase);
       res.status(200).json(responseObject);
     } else {
-      const loginWithUserNameAndPassword = await adminModel.find(
+      const loginWithUserNameAndPassword = await AdminModel.find(
         query.login(req.body.userName, req.body.password)
       );
       if (loginWithUserNameAndPassword.length !== 0) {
-        const result = await adminModel.updateOne(
+        const result = await AdminModel.updateOne(
           query.updateNotificationToken(
             loginWithUserNameAndPassword[0].userId,
             req.body.notificationToken

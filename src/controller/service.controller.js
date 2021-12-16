@@ -1,5 +1,5 @@
-const serviceModel = require("../model/service.model");
-const customerModel = require("../model/customer.model");
+const ServiceModel = require("../model/service.model");
+const CustomerModel = require("../model/customer.model");
 const uploadS3 = require("../helper/aws-s3-upload-images.helper");
 const config = require("../config/aws-s3.config");
 const baseController = require("./base.controller");
@@ -19,7 +19,7 @@ const create = async (req, res) => {
       const responseObject = response.error(messageResponse.uploadImage(err));
       return res.status(200).json(responseObject);
     } else {
-      const service = new serviceModel({
+      const service = new ServiceModel({
         serviceId: req.query.serviceId,
         customerId: req.query.customerId,
         name: req.query.name,
@@ -38,11 +38,11 @@ const create = async (req, res) => {
       });
       const baseHandler = async () => {
         const totalNumberOfDocuments =
-          await serviceModel.estimatedDocumentCount();
+          await ServiceModel.estimatedDocumentCount();
         if (totalNumberOfDocuments === 0) {
           const result = await service.save();
           if (result) {
-            const result2 = await customerModel.updateOne(
+            const result2 = await CustomerModel.updateOne(
               query.updateServiceInCustomer(
                 req.query.customerId,
                 req.query.serviceId,
@@ -61,7 +61,7 @@ const create = async (req, res) => {
             }
           }
         } else {
-          const findDocumentWithUserId = await serviceModel.find(
+          const findDocumentWithUserId = await ServiceModel.find(
             query.findService(req.query.serviceId)
           );
           if (findDocumentWithUserId.length !== 0) {
@@ -72,7 +72,7 @@ const create = async (req, res) => {
           } else if (findDocumentWithUserId.length === 0) {
             const result = await service.save();
             if (result) {
-              const result2 = await customerModel.updateOne(
+              const result2 = await CustomerModel.updateOne(
                 query.updateServiceInCustomer(
                   req.query.customerId,
                   req.query.serviceId,
@@ -111,7 +111,7 @@ const serviceList = async (req, res) => {
     };
     const { page = 1, limit = 10, customerId } = req.body;
     if (customerId === null || customerId === "") {
-      const result = await serviceModel
+      const result = await ServiceModel
         .find({})
         .select(fields)
         .limit(limit * 1)
@@ -130,7 +130,7 @@ const serviceList = async (req, res) => {
         res.status(200).json(responseObject);
       }
     } else {
-      const result = await serviceModel
+      const result = await ServiceModel
         .find(query.findCustomer(req.body.customerId))
         .select(fields);
       // console.log(result);
@@ -155,7 +155,7 @@ const serviceList = async (req, res) => {
 
 const serviceDetail = async (req, res) => {
   const baseHandler = async () => {
-    const result = await serviceModel.find(
+    const result = await ServiceModel.find(
       query.findService(req.query.serviceId)
     );
     if (result.length !== 0) {
