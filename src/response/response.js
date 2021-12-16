@@ -9,12 +9,12 @@ const error = (message) => {
   return response;
 };
 
-const success = (message, result, document_count) => {
+const success = (message, result, documentCount) => {
   const response = {
     code: 200,
     status: "success",
     message,
-    document_count,
+    documentCount,
     result,
   };
   return response;

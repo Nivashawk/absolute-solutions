@@ -1,81 +1,81 @@
 const mongoose = require("mongoose");
 const config = require("../config/server.config");
-const collectionName = config.CUSTOMER_COLLECTION;
+const collectionName = config.customerCollection;
 
-const CustomerSchema = mongoose.Schema({
-  Customer_id: {
+const customerSchema = mongoose.Schema({
+  customerId: {
     type: String,
     require: true,
   },
-  Name: {
+  name: {
     type: String,
     require: true,
   },
-  Phone_Number: {
+  phoneNumber: {
     type: Number,
     require: true,
   },
-  Address: {
+  address: {
     type: String,
     require: true,
   },
-  Location: {
+  location: {
     type: Object,
     require: true,
-    Latitude: {
+    latitude: {
       type: String,
       require: true,
     },
-    Longitude: {
+    longitude: {
       type: String,
       require: true,
     },
   },
-  Referer: {
+  referer: {
     type: String,
     require: true,
   },
-  Price: {
+  price: {
     type: Number,
     require: true,
   },
-  Hand_Cash: {
+  handCash: {
     type: Number,
     require: true,
   },
-  Product_Item: {
+  productItem: {
     type: String,
     require: true,
   },
-  Product_Description: {
+  productDescription: {
     type: String,
     require: true,
   },
-  Service_List: {
+  serviceList: {
     type: Array,
     require: true,
   },
-  Profile_pic: {
+  profilePic: {
     type: String,
     require: true,
   },
-  Product_pic: {
+  productPic: {
     type: String,
     require: true,
   },
-  Signature: {
+  signature: {
     type: String,
     require: true,
   },
-  Date: {
+  date: {
     type: String,
     require: true,
   },
 });
 
-const Customermodel = mongoose.model(
+const customerModel = mongoose.model(
   "customer",
-  CustomerSchema,
+  customerSchema,
   collectionName
 );
-module.exports = Customermodel;
+module.exports = customerModel;

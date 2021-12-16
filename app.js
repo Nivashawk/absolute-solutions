@@ -5,9 +5,9 @@ const Config = require("./src/config/server.config");
 const mongoose = require("mongoose");
 
 // Configuration
-var port = Config.PORT;
-var host = Config.HOST;
-const url = Config.DB_URL;
+var port = Config.port;
+var host = Config.host;
+const url = Config.dbUrl;
 
 //Connect to the db
 mongoose.connect(url, { useUnifiedTopology: true, useNewUrlParser: true });

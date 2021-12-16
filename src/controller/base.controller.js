@@ -1,13 +1,13 @@
 // base controller handled here
-const _response = require("../response/response");
-const Message_response = require("../response/messages");
+const response = require("../response/response");
+const messageResponse = require("../response/messages");
 
-const base = (try_block) => {
+const base = (tryBlock) => {
   try {
-    try_block();
+    tryBlock();
   } catch (err) {
-    const response = _response.error(Message_response.Unknown);
-    res.status(200).json(response);
+    const responseObject = response.error(messageResponse.Unknown);
+    res.status(200).json(responseObject);
   }
 };
 

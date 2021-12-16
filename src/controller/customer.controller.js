@@ -1,148 +1,145 @@
-const Customermodel = require("../model/customer.model");
+const customerModel = require("../model/customer.model");
 const uploadS3 = require("../helper/aws-s3-upload-images.helper");
 const config = require("../config/aws-s3.config");
-const base_controller = require("./base.controller");
-const _response = require("../response/response");
-const Message_response = require("../response/messages");
+const baseController = require("./base.controller");
+const response = require("../response/response");
+const messageResponse = require("../response/messages");
 const query = require("../model/query");
 
 const create = async (req, res) => {
-  const upload_img = uploadS3(
-    config.S3_CUSTOMER_BUCKET_NAME,
-    req.query.Customer_id,
-    (image_name = "customer")
+  const uploadImg = uploadS3(
+    config.s3CustomerBucketName,
+    req.query.customerId,
+    "customer"
   ).fields([
-    { name: "profile_pic", maxCount: 1 },
-    { name: "product_pic", maxCount: 1 },
+    { name: "profilePic", maxCount: 1 },
+    { name: "productPic", maxCount: 1 },
     { name: "signature", maxCount: 1 },
   ]);
-  upload_img(req, res, async (err) => {
+  uploadImg(req, res, async (err) => {
     if (err) {
-      const response = _response.error(Message_response.Upload_image(err));
-      return res.status(200).json(response);
+      const responseObject = response.error(messageResponse.uploadImage(err));
+      return res.status(200).json(responseObject);
     } else {
-      const customer = new Customermodel({
-        Customer_id: req.query.Customer_id,
-        Name: req.query.Name,
-        Phone_Number: req.query.Phone_Number,
-        Address: req.query.Address,
-        Location: {
-          Latitude: req.query.Latitude,
-          Longitude: req.query.Longitude,
+      const customer = new customerModel({
+        customerId: req.query.customerId,
+        name: req.query.name,
+        phoneNumber: req.query.phoneNumber,
+        address: req.query.address,
+        location: {
+          latitude: req.query.latitude,
+          longitude: req.query.longitude,
         },
-        Referer: req.query.Referer,
-        Price: req.query.Price,
-        Hand_Cash: req.query.Hand_Cash,
-        Product_Item: req.query.Product_Item,
-        Product_Description: req.query.Product_Description,
-        Service_List: [],
-        Profile_pic: req.files.profile_pic[0].location,
-        Product_pic: req.files.product_pic[0].location,
-        Signature: req.files.signature[0].location,
-        Date: new Date().toISOString().split("T")[0],
+        referer: req.query.referer,
+        price: req.query.price,
+        handCash: req.query.handCash,
+        productItem: req.query.productItem,
+        productDescription: req.query.productDescription,
+        serviceList: [],
+        profilePic: req.files.profilePic[0].location,
+        productPic: req.files.productPic[0].location,
+        signature: req.files.signature[0].location,
+        date: new Date().toISOString().split("T")[0],
       });
-      const _base = async () => {
-        const total_number_of_documents =
-          await Customermodel.estimatedDocumentCount();
-        if (
-          total_number_of_documents === undefined ||
-          total_number_of_documents === 0
-        ) {
+      const baseHandler = async () => {
+        const totalNumberOfDocuments =
+          await customerModel.estimatedDocumentCount();
+        if (totalNumberOfDocuments === 0) {
           await customer.save();
-          const response = _response.success(Message_response.Insert);
-          return res.status(200).json(response);
+          const responseObject = response.success(messageResponse.Insert);
+          return res.status(200).json(responseObject);
         } else {
-          const find_document_with_user_id = await Customermodel.find(
-            query.find_customer(req.query.Customer_id)
+          const findDocumentWithUserId = await customerModel.find(
+            query.findCustomer(req.query.customerId)
           );
-          if (find_document_with_user_id.length !== 0) {
-            const response = _response.error(
-              Message_response.Already_exits(
-                "customer_id",
-                req.query.Customer_id
-              )
+          if (findDocumentWithUserId.length !== 0) {
+            const responseObject = response.error(
+              messageResponse.alreadyExits("customerId", req.query.customerId)
             );
-            res.status(200).json(response);
-          } else if (find_document_with_user_id.length === 0) {
+            res.status(200).json(responseObject);
+          } else if (findDocumentWithUserId.length === 0) {
             await customer.save();
-            const response = _response.success(Message_response.Insert);
-            return res.status(200).json(response);
+            const responseObject = response.success(messageResponse.Insert);
+            return res.status(200).json(responseObject);
           }
         }
       };
-      base_controller.base(_base);
+      baseController.base(baseHandler);
     }
   });
 };
 
 // ### list of all Customers in the collection ###
 
-const customers_list = async (req, res) => {
-  const _base = async () => {
-    fields = { Customer_id: 1, Profile_pic: 1, Name: 1, Product_Item: 1 };
-    const { page = 1, limit = 10, Customer_id } = req.body;
-    if (Customer_id === null || Customer_id === "") {
-      const result = await Customermodel.find({})
+const customersList = async (req, res) => {
+  const baseHandler = async () => {
+    fields = { customerId: 1, profilePic: 1, name: 1, productItem: 1 };
+    const { page = 1, limit = 10, customerId } = req.body;
+    if (customerId === null || customerId === "") {
+      const result = await customerModel
+        .find({})
         .select(fields)
         .limit(limit * 1)
         .skip((page - 1) * limit);
       if (result.length !== 0) {
-        const response = _response.success(
-          Message_response.Get_all("customers"),
+        const responseObject = response.success(
+          messageResponse.getAll("customers"),
           result,
-          (document_count = result.length)
+          result.length
         );
-        return res.status(200).json(response);
+        return res.status(200).json(responseObject);
       } else {
-        const response = _response.error(
-          Message_response.No_result("customers")
+        const responseObject = response.error(
+          messageResponse.noResult("customers")
         );
-        res.status(200).json(response);
+        res.status(200).json(responseObject);
       }
     } else {
-      const result = await Customermodel.find(
-        query.find_customer(req.body.Customer_id)
-      ).select(fields);
+      const result = await customerModel
+        .find(query.findCustomer(req.body.customerId))
+        .select(fields);
       if (result.length !== 0) {
-        const response = _response.success(
-          Message_response.Get_one("customer"),
+        const responseObject = response.success(
+          messageResponse.getOne("customer"),
           result
         );
-        return res.status(200).json(response);
+        return res.status(200).json(responseObject);
       } else {
-        const response = _response.error(
-          Message_response.No_result("customer")
+        const responseObject = response.error(
+          messageResponse.noResult("customer")
         );
-        res.status(200).json(response);
+        res.status(200).json(responseObject);
       }
     }
   };
-  base_controller.base(_base);
+  baseController.base(baseHandler);
 };
 
-// ### search customers using customer_id in the collection ###
+// ### search customers using customerId in the collection ###
 
-const customers_detail = async (req, res) => {
-  const _base = async () => {
-    const result = await Customermodel.find(
-      query.find_customer(req.body.Customer_id)
+const customersDetail = async (req, res) => {
+  const baseHandler = async () => {
+    const result = await customerModel.find(
+      query.findCustomer(req.body.customerId)
     );
     if (result.length !== 0) {
-      const response = _response.success(
-        Message_response.Get_one("customer"),
+      const responseObject = response.success(
+        messageResponse.getOne("customer"),
         result
       );
-      return res.status(200).json(response);
+      return res.status(200).json(responseObject);
     } else {
-      const response = _response.error(Message_response.No_result("customers"));
-      res.status(200).json(response);
+      const responseObject = response.error(
+        messageResponse.noResult("customers")
+      );
+      res.status(200).json(responseObject);
     }
   };
-  base_controller.base(_base);
+  baseController.base(baseHandler);
 };
 
 module.exports = {
   create,
-  customers_list,
-  customers_detail,
+  customersList,
+  customersDetail,
 };

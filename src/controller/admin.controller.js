@@ -1,96 +1,86 @@
-const Adminmodel = require("../model/admin.model");
-const BaseController = require("./base.controller");
-const Response = require("../response/response");
-const Message_response = require("../response/messages");
-const Query = require("../model/query");
+const adminModel = require("../model/admin.model");
+const baseController = require("./base.controller");
+const response = require("../response/response");
+const messageResponse = require("../response/messages");
+const query = require("../model/query");
 
 // ### create Admin document ###
 
 const create = async (req, res) => {
-  const admin = new Adminmodel({
-    User_id: req.body.User_id,
-    Name: req.body.Name,
-    Phone_Number: req.body.Phone_Number,
-    Desigination: req.body.Desigination,
-    Username: req.body.Username,
-    Password: req.body.Password,
-    Notification_Token: "",
+  const admin = new adminModel({
+    userId: req.body.userId,
+    name: req.body.name,
+    phoneNumber: req.body.phoneNumber,
+    desigination: req.body.desigination,
+    userName: req.body.userName,
+    password: req.body.password,
+    notificationToken: "",
   });
-  const _base = async () => {
-    const total_number_of_documents = await Adminmodel.estimatedDocumentCount();
-    // console.log(total_number_of_documents);
-    if (
-      total_number_of_documents === undefined ||
-      total_number_of_documents === 0
-    ) {
+  const baseHandler = async () => {
+    const totalNumberOfDocuments = await adminModel.estimatedDocumentCount();
+    if (totalNumberOfDocuments === 0) {
       await admin.save();
-      const response = Response.success(Message_response.Insert);
-      return res.status(200).json(response);
+      const responseObject = response.success(messageResponse.Insert);
+      return res.status(200).json(responseObject);
     } else {
-      const find_document_with_user_id = await Adminmodel.find(
-        Query.find_user(req.body.User_id)
+      const findDocumentWithUserId = await adminModel.find(
+        query.findUser(req.body.userId)
       );
-      //   console.log(find_document_with_user_id.length);
-      if (find_document_with_user_id.length !== 0) {
-        const response = Response.error(
-          Message_response.Already_exits("user_id", req.body.User_id)
+      if (findDocumentWithUserId.length !== 0) {
+        const responseObject = response.error(
+          messageResponse.alreadyExits("userId", req.body.userId)
         );
-        res.status(200).json(response);
-      } else if (find_document_with_user_id.length === 0) {
+        res.status(200).json(responseObject);
+      } else if (findDocumentWithUserId.length === 0) {
         await admin.save();
-        const response = Response.success(Message_response.Insert);
-        return res.status(200).json(response);
+        const responseObject = response.success(messageResponse.Insert);
+        return res.status(200).json(responseObject);
       }
     }
   };
-  BaseController.base(_base);
+  baseController.base(baseHandler);
 };
 
 // ### Admin Login ###
 
 const login = async (req, res) => {
-  const _base = async () => {
-    const total_number_of_documents = await Adminmodel.estimatedDocumentCount();
-    // console.log(total_number_of_documents);
-    if (
-      total_number_of_documents === undefined ||
-      total_number_of_documents === 0
-    ) {
-      const response = Response.error(Message_response.Empty_database);
-      res.status(200).json(response);
+  const baseHandler = async () => {
+    const totalNumberOfDocuments = await adminModel.estimatedDocumentCount();
+    if (totalNumberOfDocuments === 0) {
+      const responseObject = response.error(messageResponse.emptyDatabase);
+      res.status(200).json(responseObject);
     } else {
-      const login_with_username_and_password = await Adminmodel.find(
-        Query.login(req.body.Username, req.body.Password)
+      const loginWithUserNameAndPassword = await adminModel.find(
+        query.login(req.body.userName, req.body.password)
       );
-      //   console.log("login_results",login_with_username_and_password[0].User_id);
-      if (login_with_username_and_password.length !== 0) {
-        const result = await Adminmodel.updateOne(
-          Query.update_notification_token(
-            login_with_username_and_password[0].User_id,
-            req.body.Notification_Token
+      if (loginWithUserNameAndPassword.length !== 0) {
+        const result = await adminModel.updateOne(
+          query.updateNotificationToken(
+            loginWithUserNameAndPassword[0].userId,
+            req.body.notificationToken
           )
         );
         if (result) {
-          const response = Response.success(Message_response.Login);
-          return res.status(200).json(response);
+          const responseObject = response.success(messageResponse.login);
+          return res.status(200).json(responseObject);
         } else {
-          const response = Response.error(
-            Message_response.Not_updated("notification token")
+          const responseObject = response.error(
+            messageResponse.notUpdated("notification token")
           );
-          return res.status(200).json(response);
+          return res.status(200).json(responseObject);
         }
       } else {
-        const response = Response.error(
-          Message_response.Invalid_credentials(
-            req.body.Username,
-            req.body.Password
+        const responseObject = response.error(
+          messageResponse.invalidCredentials(
+            req.body.userName,
+            req.body.password
           )
         );
-        return res.status(200).json(response);
+        return res.status(200).json(responseObject);
       }
     }
   };
-  BaseController.base(_base);
+  baseController.base(baseHandler);
 };
 
 module.exports = {

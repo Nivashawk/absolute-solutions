@@ -1,41 +1,41 @@
 // messages handled here
 
-const No_result = (name) => {
+const noResult = (name) => {
   return `No ${name} found`;
 };
-const Not_updated = (name1) => {
+const notUpdated = (name) => {
   return `${name} not updated in document`;
 };
-const Invalid_credentials = (username, password) => {
+const invalidCredentials = (username, password) => {
   return `please check the credentials username: ${username}, password: ${password}`;
 };
-const Get_all = (name) => {
+const getAll = (name) => {
   return `list of all ${name} fetched successfully`;
 };
-const Get_one = (name) => {
+const getOne = (name) => {
   return `${name} fetched successfully`;
 };
-const Upload_image = (error) => {
+const uploadImage = (error) => {
   return `${error}`;
 };
-const Already_exits = (name, _id) => {
-  return `document with this ${name} ${_id} already exits`;
+const alreadyExits = (name, id) => {
+  return `document with this ${name} ${id} already exits`;
 };
 const Unknown = `Unknown Error Found From Server Side`;
-const Empty_database = `Unknown Error Found From Server Side`;
+const emptyDatabase = `Unknown Error Found From Server Side`;
 const Insert = `document were inserted succssfully`;
-const Login = `you have been logged in successfully`;
+const login = `you have been logged in successfully`;
 
 module.exports = {
-  No_result,
-  Not_updated,
-  Invalid_credentials,
-  Get_all,
-  Get_one,
-  Upload_image,
-  Already_exits,
+  noResult,
+  notUpdated,
+  invalidCredentials,
+  getAll,
+  getOne,
+  uploadImage,
+  alreadyExits,
   Unknown,
-  Empty_database,
+  emptyDatabase,
   Insert,
-  Login,
+  login,
 };

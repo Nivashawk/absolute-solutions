@@ -1,52 +1,47 @@
 // All the mongo db queries are handled here
 
 // Admin controller Queries
-const find_user = (User_id) => {
-  return { User_id };
+const findUser = (userId) => {
+  return { userId };
 };
 
-const login = (Username, Password) => {
+const login = (userName, password) => {
   return {
-    $and: [{ Username }, { Password }],
+    $and: [{ userName }, { password }],
   };
 };
 
-const update_notification_token = (User_id, Notification_Token) => {
+const updateNotificationToken = (userId, notificationToken) => {
   return (
     {
-      User_id,
+      userId,
     },
     {
-      $set: { Notification_Token },
+      $set: { notificationToken },
     }
   );
 };
 
 // Customer controller Queries
-const find_customer = (Customer_id) => {
-  return { Customer_id };
+const findCustomer = (customerId) => {
+  return { customerId };
 };
 
 // Service controller Queries
-const find_service = (Service_id) => {
-  return { Service_id };
+const findService = (serviceId) => {
+  return { serviceId };
 };
 
-const update_service_in_customer = (
-  Customer_id,
-  Service_id,
-  Name,
-  Product_Item
-) => {
+const updateServiceInCustomer = (customerId, serviceId, Name, productItem) => {
   return (
-    { Customer_id },
+    { customerId },
     {
       $push: {
-        Service_List: {
-          Service_id,
-          Customer_id,
+        serviceList: {
+          serviceId,
+          customerId,
           Name,
-          Product_Item,
+          productItem,
         },
       },
     }
@@ -54,10 +49,10 @@ const update_service_in_customer = (
 };
 
 module.exports = {
-  find_user,
-  find_customer,
-  find_service,
+  findUser,
+  findCustomer,
+  findService,
   login,
-  update_notification_token,
-  update_service_in_customer,
+  updateNotificationToken,
+  updateServiceInCustomer,
 };

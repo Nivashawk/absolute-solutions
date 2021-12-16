@@ -1,25 +1,25 @@
 const mongoose = require("mongoose");
 const config = require("../config/server.config");
-const collectionName = config.SCHEDULE_COLLECTION;
+const collectionName = config.scheduleCollection;
 
-const ScheduleSchema = mongoose.Schema({
-  Title: {
+const scheduleSchema = mongoose.Schema({
+  title: {
     type: String,
     require: true,
   },
-  Message: {
+  message: {
     type: String,
     require: true,
   },
-  Date_And_Time: {
+  dateAndTime: {
     type: String,
     require: true,
   },
 });
 
-const Schedulemodel = mongoose.model(
+const scheduleModel = mongoose.model(
   "schedule",
-  ScheduleSchema,
+  scheduleSchema,
   collectionName
 );
-module.exports = Schedulemodel;
+module.exports = scheduleModel;

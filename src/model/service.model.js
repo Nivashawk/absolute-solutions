@@ -1,69 +1,69 @@
 const mongoose = require("mongoose");
 const config = require("../config/server.config");
-const collectionName = config.SERVICE_COLLECTION;
+const collectionName = config.serviceCollection;
 
-const ServiceSchema = mongoose.Schema({
-  Service_id: {
+const serviceSchema = mongoose.Schema({
+  serviceId: {
     type: String,
     require: true,
   },
-  Customer_id: {
+  customerId: {
     type: String,
     require: true,
   },
-  Name: {
+  name: {
     type: String,
     require: true,
   },
-  Phone_Number: {
+  phoneNumber: {
     type: Number,
     require: true,
   },
-  Work_Done: {
+  workDone: {
     type: String,
     require: true,
   },
-  Parts: {
+  parts: {
     type: String,
     require: true,
   },
-  Price: {
+  price: {
     type: Number,
     require: true,
   },
-  Hand_Cash: {
+  handCash: {
     type: Number,
     require: true,
   },
-  Raw: {
+  raw: {
     type: Number,
     require: true,
   },
-  Aro: {
+  aro: {
     type: Number,
     require: true,
   },
-  Rejection_Rate: {
+  rejectionRate: {
     type: Number,
     require: true,
   },
-  Product_Item: {
+  productItem: {
     type: String,
     require: true,
   },
-  Product_Description: {
+  productDescription: {
     type: String,
     require: true,
   },
-  Service_pic: {
+  servicePic: {
     type: String,
     require: true,
   },
-  Date: {
+  date: {
     type: String,
     require: true,
   },
 });
 
-const Servicemodel = mongoose.model("service", ServiceSchema, collectionName);
-module.exports = Servicemodel;
+const serviceModel = mongoose.model("service", serviceSchema, collectionName);
+module.exports = serviceModel;

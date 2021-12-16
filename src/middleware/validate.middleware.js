@@ -4,9 +4,9 @@ const validator = require("../helper/validate.helper");
 
 const login = (req, res, next) => {
   const validationRule = {
-    Username: "required|string",
-    Password: "required|string",
-    Notification_Token: "required|string",
+    userName: "required|string",
+    password: "required|string",
+    notificationToken: "required|string",
   };
   validator(req.body, validationRule, {}, (err, status) => {
     if (!status) {
@@ -24,19 +24,19 @@ const login = (req, res, next) => {
 
 // validation for creating customer
 
-const create_customer = (req, res, next) => {
+const createCustomer = (req, res, next) => {
   const validationRule = {
-    Customer_id: "required|string",
-    Name: "required|string",
-    Phone_Number: "required|integer",
-    Address: "required|string",
-    Latitude: "required|string",
-    Longitude: "required|string",
-    Referer: "required|string",
-    Price: "required|integer",
-    Hand_Cash: "required|integer",
-    Product_Item: "required|string",
-    Product_Description: "required|string",
+    customerId: "required|string",
+    name: "required|string",
+    phoneNumber: "required|integer",
+    address: "required|string",
+    latitude: "required|string",
+    longitude: "required|string",
+    referer: "required|string",
+    price: "required|integer",
+    handCash: "required|integer",
+    productItem: "required|string",
+    productDescription: "required|string",
   };
   validator(req.query, validationRule, {}, (err, status) => {
     if (!status) {
@@ -54,9 +54,9 @@ const create_customer = (req, res, next) => {
 
 // validation for search customer
 
-const search_customer = (req, res, next) => {
+const searchCustomer = (req, res, next) => {
   const validationRule = {
-    Customer_id: "required|string",
+    customerId: "required|string",
   };
   validator(req.body, validationRule, {}, (err, status) => {
     if (!status) {
@@ -74,21 +74,21 @@ const search_customer = (req, res, next) => {
 
 // validation for creating service
 
-const create_service = (req, res, next) => {
+const createService = (req, res, next) => {
   const validationRule = {
-    Service_id: "required|string",
-    Customer_id: "required|string",
-    Name: "required|string",
-    Phone_Number: "required|integer",
-    Work_Done: "required|string",
-    Parts: "required|string",
-    Price: "required|integer",
-    Hand_Cash: "required|integer",
-    Raw: "required|integer",
-    Aro: "required|integer",
-    Rejection_Rate: "required|integer",
-    Product_Item: "required|string",
-    Product_Description: "required|string",
+    serviceId: "required|string",
+    customerId: "required|string",
+    name: "required|string",
+    phoneNumber: "required|integer",
+    workDone: "required|string",
+    parts: "required|string",
+    price: "required|integer",
+    handCash: "required|integer",
+    raw: "required|integer",
+    aro: "required|integer",
+    rejectionRate: "required|integer",
+    productItem: "required|string",
+    productDescription: "required|string",
   };
   validator(req.query, validationRule, {}, (err, status) => {
     if (!status) {
@@ -106,9 +106,9 @@ const create_service = (req, res, next) => {
 
 // validation for search service
 
-const search_service = (req, res, next) => {
+const searchService = (req, res, next) => {
   const validationRule = {
-    Customer_id: "required|string",
+    customerId: "required|string",
   };
   validator(req.body, validationRule, {}, (err, status) => {
     if (!status) {
@@ -126,8 +126,8 @@ const search_service = (req, res, next) => {
 
 module.exports = {
   login,
-  create_customer,
-  search_customer,
-  create_service,
-  search_service,
+  createCustomer,
+  searchCustomer,
+  createService,
+  searchService,
 };

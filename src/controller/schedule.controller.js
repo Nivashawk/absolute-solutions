@@ -1,4 +1,4 @@
-const Schedulemodel = require("../model/schedule.model");
+const scheduleModel = require("../model/schedule.model");
 // const schedule_message = require("node-schedule");
 // const cron = require("node-cron");
 const Agenda = require("agenda");
@@ -10,7 +10,7 @@ var connectionEstablised = false;
 // ### connecting agenda to db
 
 const agenda = new Agenda({
-  db: { address: config.DB_URL, collection: config.SCHEDULE_COLLECTION },
+  db: { address: config.dbUrl, collection: config.scheduleCollection },
 });
 
 // ### When the connection is established, set the flag
@@ -35,7 +35,7 @@ const schedule = async (req, res) => {
   try {
     if (connectionEstablised) {
       agenda.start();
-      agenda.every("*/1 * * * *", { title: req.body.Title });
+      agenda.every("*/1 * * * *", { title: req.body.title });
     }
 
     res.status(200).json({

@@ -1,37 +1,37 @@
 const mongoose = require("mongoose");
 const config = require("../config/server.config");
-const collectionName = config.ADMIN_COLLECTION;
+const collectionName = config.adminCollection;
 
-const AdminSchema = mongoose.Schema({
-  User_id: {
+const adminSchema = mongoose.Schema({
+  userId: {
     type: String,
     require: true,
   },
-  Name: {
+  name: {
     type: String,
     require: true,
   },
-  Phone_Number: {
+  phoneNumber: {
     type: Number,
     require: true,
   },
-  Desigination: {
+  desigination: {
     type: String,
     require: true,
   },
-  Notification_Token: {
+  notificationToken: {
     type: String,
     require: true,
   },
-  Username: {
+  userName: {
     type: String,
     require: true,
   },
-  Password: {
+  password: {
     type: String,
     require: true,
   },
 });
 
-const Adminmodel = mongoose.model("admin", AdminSchema, collectionName);
-module.exports = Adminmodel;
+const adminModel = mongoose.model("admin", adminSchema, collectionName);
+module.exports = adminModel;
