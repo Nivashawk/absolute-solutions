@@ -6,6 +6,7 @@ const baseController = require("./base.controller");
 const response = require("../response/response");
 const messageResponse = require("../response/messages");
 const query = require("../model/query");
+const requiredFields = require("../model/fields")
 // ### create service document ###
 
 const create = async (req, res) => {
@@ -102,18 +103,11 @@ const create = async (req, res) => {
 
 const serviceList = async (req, res) => {
   const baseHandler = async () => {
-    fields = {
-      customerId: 1,
-      serviceId: 1,
-      servicePic: 1,
-      name: 1,
-      productItem: 1,
-    };
     const { page = 1, limit = 10, customerId } = req.body;
     if (customerId === null || customerId === "") {
       const result = await ServiceModel
         .find({})
-        .select(fields)
+        .select(requiredFields.serviceFields)
         .limit(limit * 1)
         .skip((page - 1) * limit);
       if (result.length !== 0) {
@@ -132,7 +126,7 @@ const serviceList = async (req, res) => {
     } else {
       const result = await ServiceModel
         .find(query.findCustomer(req.body.customerId))
-        .select(fields);
+        .select(requiredFields.serviceFields);
       // console.log(result);
       if (result.length !== 0) {
         const responseObject = response.success(

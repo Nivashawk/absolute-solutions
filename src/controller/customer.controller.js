@@ -5,6 +5,7 @@ const baseController = require("./base.controller");
 const response = require("../response/response");
 const messageResponse = require("../response/messages");
 const query = require("../model/query");
+const requiredFields = require("../model/fields")
 
 const create = async (req, res) => {
   const uploadImg = uploadS3(
@@ -73,12 +74,11 @@ const create = async (req, res) => {
 
 const customersList = async (req, res) => {
   const baseHandler = async () => {
-    fields = { customerId: 1, profilePic: 1, name: 1, productItem: 1 };
     const { page = 1, limit = 10, customerId } = req.body;
     if (customerId === null || customerId === "") {
       const result = await CustomerModel
         .find({})
-        .select(fields)
+        .select(requiredFields.customerFields)
         .limit(limit * 1)
         .skip((page - 1) * limit);
       if (result.length !== 0) {
@@ -97,7 +97,7 @@ const customersList = async (req, res) => {
     } else {
       const result = await CustomerModel
         .find(query.findCustomer(req.body.customerId))
-        .select(fields);
+        .select(requiredFields.customerFields);
       if (result.length !== 0) {
         const responseObject = response.success(
           messageResponse.getOne("customer"),

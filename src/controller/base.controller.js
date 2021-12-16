@@ -2,7 +2,7 @@
 const response = require("../response/response");
 const messageResponse = require("../response/messages");
 
-const base = (tryBlock) => {
+const base = (tryBlock,res,req) => {
   try {
     tryBlock();
   } catch (err) {
