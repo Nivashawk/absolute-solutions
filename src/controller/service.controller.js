@@ -6,7 +6,7 @@ const baseController = require("./base.controller");
 const response = require("../response/response");
 const messageResponse = require("../response/messages");
 const query = require("../model/query");
-const requiredFields = require("../model/fields")
+const requiredFields = require("../model/fields");
 // ### create service document ###
 
 const create = async (req, res) => {

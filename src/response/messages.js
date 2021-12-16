@@ -21,10 +21,10 @@ const uploadImage = (error) => {
 const alreadyExits = (name, id) => {
   return `document with this ${name} ${id} already exits`;
 };
-const Unknown = `Unknown Error Found From Server Side`;
-const emptyDatabase = `Unknown Error Found From Server Side`;
-const Insert = `document were inserted succssfully`;
-const login = `you have been logged in successfully`;
+const Unknown = "Unknown Error Found From Server Side";
+const emptyDatabase = "Unknown Error Found From Server Side";
+const Insert = "document were inserted succssfully";
+const login = "you have been logged in successfully";
 
 module.exports = {
   noResult,
