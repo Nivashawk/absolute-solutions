@@ -41,7 +41,7 @@ const schedule = async (req, res) => {
     res.status(200).json({
       code: 200,
       status: "success",
-      message: `scheduled successfully`,
+      message: "scheduled successfully",
     });
   } catch (err) {
     res.json({

@@ -11,7 +11,7 @@ const createToken = (id) => {
 // verifing jwt token
 const requireAuth = (req, res, next) => {
   const Auth = req.header("authorization");
-  if (Auth != undefined) {
+  if (Auth !== null) {
     const token = Auth.split(" ");
     console.log(token[1]);
 
