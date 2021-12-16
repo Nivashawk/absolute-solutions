@@ -1,0 +1,1 @@
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/9615c044b1504f45ac69c5f1d6b94a28)](https://www.codacy.com/gh/Nivashawk/absolute-solutions/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Nivashawk/absolute-solutions&amp;utm_campaign=Badge_Grade)
