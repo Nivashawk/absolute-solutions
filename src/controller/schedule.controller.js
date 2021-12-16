@@ -9,21 +9,21 @@ var connectionEstablised = false;
 
 // ### connecting agenda to db
 
-// const agenda = new Agenda({
-//   db: { address: config.DB_URL, collection: config.SCHEDULE_COLLECTION },
-// });
+const agenda = new Agenda({
+  db: { address: config.DB_URL, collection: config.SCHEDULE_COLLECTION },
+});
 
 // ### When the connection is established, set the flag
 
-// agenda.on("ready", function () {
-//   connectionEstablised = true;
-// });
+agenda.on("ready", function () {
+  connectionEstablised = true;
+});
 
 // ### define agenda function
 
-// agenda.define(job.attrs.data["title"], function () {
-//   console.log("Test");
-// });
+agenda.define("test", function () {
+  console.log("");
+});
 
 // ### schedule api handled here ###
 const schedule = async (req, res) => {
@@ -35,7 +35,7 @@ const schedule = async (req, res) => {
   try {
     if (connectionEstablised) {
       agenda.start();
-      agenda.every("*/1 * * * *", {title : req.body.Title});
+      agenda.every("*/1 * * * *", { title: req.body.Title });
     }
 
     res.status(200).json({

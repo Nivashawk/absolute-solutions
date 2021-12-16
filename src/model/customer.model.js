@@ -21,15 +21,15 @@ const CustomerSchema = mongoose.Schema({
   },
   Location: {
     type: Object,
-    require:true,
-    Latitude:{
-        type: String,
-        require:true,
+    require: true,
+    Latitude: {
+      type: String,
+      require: true,
     },
-    Longitude:{
-        type: String,
-        require:true,
-    }
+    Longitude: {
+      type: String,
+      require: true,
+    },
   },
   Referer: {
     type: String,
@@ -47,7 +47,7 @@ const CustomerSchema = mongoose.Schema({
     type: String,
     require: true,
   },
-  Product_Discription: {
+  Product_Description: {
     type: String,
     require: true,
   },
@@ -70,7 +70,7 @@ const CustomerSchema = mongoose.Schema({
   Date: {
     type: String,
     require: true,
-  }
+  },
 });
 
 const Customermodel = mongoose.model(
