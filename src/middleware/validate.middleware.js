@@ -16,7 +16,7 @@ const baseValidator = (paramType,validationRule,res, next) => {
       next();
     }
   });
-}
+};
 
 const login = (req, res, next) => {
   const validationRule = {
@@ -24,7 +24,7 @@ const login = (req, res, next) => {
     password: "required|string",
     notificationToken: "required|string",
   };
-  baseValidator(req.body,validationRule,res, next)
+  baseValidator(req.body,validationRule,res, next);
   
 };
 
@@ -44,7 +44,7 @@ const createCustomer = (req, res, next) => {
     productItem: "required|string",
     productDescription: "required|string",
   };
-  baseValidator(req.query,validationRule,res, next)
+  baseValidator(req.query,validationRule,res, next);
 };
 
 // validation for search customer
@@ -53,7 +53,7 @@ const searchCustomer = (req, res, next) => {
   const validationRule = {
     customerId: "required|string",
   };
-  baseValidator(req.body,validationRule,res, next)
+  baseValidator(req.body,validationRule,res, next);
 };
 
 // validation for creating service
@@ -74,7 +74,7 @@ const createService = (req, res, next) => {
     productItem: "required|string",
     productDescription: "required|string",
   };
-  baseValidator(req.query,validationRule,res, next)
+  baseValidator(req.query,validationRule,res, next);
 };
 
 // validation for search service
@@ -83,7 +83,7 @@ const searchService = (req, res, next) => {
   const validationRule = {
     customerId: "required|string",
   };
-  baseValidator(req.body,validationRule,res, next)
+  baseValidator(req.body,validationRule,res, next);
 };
 
 module.exports = {
