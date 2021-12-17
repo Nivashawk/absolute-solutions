@@ -73,7 +73,7 @@ const create = async (req, res) => {
           } else if (findDocumentWithUserId.length === 0) {
             const result = await service.save();
             if (result) {
-              const result2 = await CustomerModel.updateOne(
+              const result2 = await CustomerModel.updateOne({customerId : req.query.customerId},
                 query.updateServiceInCustomer(
                   req.query.customerId,
                   req.query.serviceId,

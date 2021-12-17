@@ -32,15 +32,14 @@ const findService = (serviceId) => {
   return { serviceId };
 };
 
-const updateServiceInCustomer = (customerId, serviceId, Name, productItem) => {
+const updateServiceInCustomer = (customerId, serviceId, name, productItem) => {
   return (
-    { customerId },
     {
       $push: {
         serviceList: {
           serviceId,
           customerId,
-          Name,
+          name,
           productItem,
         },
       },
