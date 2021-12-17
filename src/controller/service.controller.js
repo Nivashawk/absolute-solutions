@@ -150,7 +150,7 @@ const serviceList = async (req, res) => {
 const serviceDetail = async (req, res) => {
   const baseHandler = async () => {
     const result = await ServiceModel.find(
-      query.findService(req.query.serviceId)
+      query.findService(req.body.serviceId)
     );
     if (result.length !== 0) {
       const responseObject = response.success(
