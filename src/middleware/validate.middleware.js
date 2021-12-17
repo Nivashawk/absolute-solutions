@@ -2,13 +2,9 @@ const validator = require("../helper/validate.helper");
 
 // validation for Login
 
-const login = (req, res, next) => {
-  const validationRule = {
-    userName: "required|string",
-    password: "required|string",
-    notificationToken: "required|string",
-  };
-  validator(req.body, validationRule, {}, (err, status) => {
+
+const baseValidator = (paramType,validationRule,res, next) => {
+  validator(paramType, validationRule, {}, (err, status) => {
     if (!status) {
       res.status(200).send({
         code: 201,
@@ -20,6 +16,16 @@ const login = (req, res, next) => {
       next();
     }
   });
+}
+
+const login = (req, res, next) => {
+  const validationRule = {
+    userName: "required|string",
+    password: "required|string",
+    notificationToken: "required|string",
+  };
+  baseValidator(req.body,validationRule,res, next)
+  
 };
 
 // validation for creating customer
@@ -38,18 +44,7 @@ const createCustomer = (req, res, next) => {
     productItem: "required|string",
     productDescription: "required|string",
   };
-  validator(req.query, validationRule, {}, (err, status) => {
-    if (!status) {
-      res.status(200).send({
-        code: 201,
-        status: "failure",
-        message: "validation error",
-        error: err["errors"],
-      });
-    } else {
-      next();
-    }
-  });
+  baseValidator(req.query,validationRule,res, next)
 };
 
 // validation for search customer
@@ -58,18 +53,7 @@ const searchCustomer = (req, res, next) => {
   const validationRule = {
     customerId: "required|string",
   };
-  validator(req.body, validationRule, {}, (err, status) => {
-    if (!status) {
-      res.status(200).send({
-        code: 201,
-        status: "failure",
-        message: "validation error",
-        error: err["errors"],
-      });
-    } else {
-      next();
-    }
-  });
+  baseValidator(req.body,validationRule,res, next)
 };
 
 // validation for creating service
@@ -90,18 +74,7 @@ const createService = (req, res, next) => {
     productItem: "required|string",
     productDescription: "required|string",
   };
-  validator(req.query, validationRule, {}, (err, status) => {
-    if (!status) {
-      res.status(200).send({
-        code: 201,
-        status: "failure",
-        message: "validation error",
-        error: err["errors"],
-      });
-    } else {
-      next();
-    }
-  });
+  baseValidator(req.query,validationRule,res, next)
 };
 
 // validation for search service
@@ -110,18 +83,7 @@ const searchService = (req, res, next) => {
   const validationRule = {
     customerId: "required|string",
   };
-  validator(req.body, validationRule, {}, (err, status) => {
-    if (!status) {
-      res.status(200).send({
-        code: 201,
-        status: "failure",
-        message: "validation error",
-        error: err["errors"],
-      });
-    } else {
-      next();
-    }
-  });
+  baseValidator(req.body,validationRule,res, next)
 };
 
 module.exports = {

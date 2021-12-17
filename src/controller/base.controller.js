@@ -2,6 +2,7 @@
 const response = require("../response/response");
 const messageResponse = require("../response/messages");
 
+
 const base = (tryBlock,res,req) => {
   try {
     tryBlock();
@@ -11,6 +12,8 @@ const base = (tryBlock,res,req) => {
   }
 };
 
+
+
 module.exports = {
-  base,
+  base
 };
