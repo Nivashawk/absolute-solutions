@@ -1,5 +1,4 @@
 const AdminModel = require("../model/admin.model");
-const baseController = require("./base.controller");
 const response = require("../response/response");
 const messageResponse = require("../response/messages");
 const query = require("../model/query");
@@ -16,7 +15,7 @@ const create = async (req, res) => {
     password: req.body.password,
     notificationToken: "",
   });
-  const baseHandler = async () => {
+  try {
     const totalNumberOfDocuments = await AdminModel.estimatedDocumentCount();
     if (totalNumberOfDocuments === 0) {
       await admin.save();
@@ -37,14 +36,16 @@ const create = async (req, res) => {
         return res.status(200).json(responseObject);
       }
     }
-  };
-  baseController.base(baseHandler);
+  } catch (error) {
+    const responseObject = response.error(error.message);
+    res.status(200).json(responseObject);
+  }
 };
 
 // ### Admin Login ###
 
 const login = async (req, res) => {
-  const baseHandler = async () => {
+  try {
     const totalNumberOfDocuments = await AdminModel.estimatedDocumentCount();
     if (totalNumberOfDocuments === 0) {
       const responseObject = response.error(messageResponse.emptyDatabase);
@@ -54,9 +55,8 @@ const login = async (req, res) => {
         query.login(req.body.userName, req.body.password)
       );
       if (loginWithUserNameAndPassword.length !== 0) {
-        const result = await AdminModel.updateOne(
+        const result = await AdminModel.updateOne({userId : loginWithUserNameAndPassword[0].userId},
           query.updateNotificationToken(
-            loginWithUserNameAndPassword[0].userId,
             req.body.notificationToken
           )
         );
@@ -79,8 +79,10 @@ const login = async (req, res) => {
         return res.status(200).json(responseObject);
       }
     }
-  };
-  baseController.base(baseHandler);
+  } catch (error) {
+    const responseObject = response.error(error.message);
+    res.status(200).json(responseObject);
+  }
 };
 
 module.exports = {

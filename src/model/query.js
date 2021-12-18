@@ -11,11 +11,8 @@ const login = (userName, password) => {
   };
 };
 
-const updateNotificationToken = (userId, notificationToken) => {
+const updateNotificationToken = (notificationToken) => {
   return (
-    {
-      userId,
-    },
     {
       $set: { notificationToken },
     }

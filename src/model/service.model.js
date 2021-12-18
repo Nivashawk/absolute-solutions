@@ -59,6 +59,10 @@ const serviceSchema = mongoose.Schema({
     type: String,
     require: true,
   },
+  signature: {
+    type: String,
+    require: true,
+  },
   date: {
     type: String,
     require: true,

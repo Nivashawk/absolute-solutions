@@ -1,13 +1,18 @@
 const CustomerModel = require("../model/customer.model");
 const uploadS3 = require("../helper/aws-s3-upload-images.helper");
 const config = require("../config/aws-s3.config");
-const baseController = require("./base.controller");
 const response = require("../response/response");
 const messageResponse = require("../response/messages");
 const query = require("../model/query");
 const requiredFields = require("../model/fields");
 
 const create = async (req, res) => {
+  const insertDocumentToCollection = async (model) => {
+    await model.save();
+    const responseObject = response.success(messageResponse.Insert);
+    return res.status(200).json(responseObject);
+  };
+
   const uploadImg = uploadS3(
     config.s3CustomerBucketName,
     req.query.customerId,
@@ -42,30 +47,28 @@ const create = async (req, res) => {
         signature: req.files.signature[0].location,
         date: new Date().toISOString().split("T")[0],
       });
-      const baseHandler = async () => {
+      try {
         const totalNumberOfDocuments =
           await CustomerModel.estimatedDocumentCount();
         if (totalNumberOfDocuments === 0) {
-          await customer.save();
-          const responseObject = response.success(messageResponse.Insert);
-          return res.status(200).json(responseObject);
+          await insertDocumentToCollection(customer);
         } else {
-          const findDocumentWithUserId = await CustomerModel.find(
+          const findDocumentWithCustomerId = await CustomerModel.find(
             query.findCustomer(req.query.customerId)
           );
-          if (findDocumentWithUserId.length !== 0) {
+          if (findDocumentWithCustomerId.length !== 0) {
             const responseObject = response.error(
               messageResponse.alreadyExits("customerId", req.query.customerId)
             );
             res.status(200).json(responseObject);
-          } else if (findDocumentWithUserId.length === 0) {
-            await customer.save();
-            const responseObject = response.success(messageResponse.Insert);
-            return res.status(200).json(responseObject);
+          } else if (findDocumentWithCustomerId.length === 0) {
+            await insertDocumentToCollection(customer);
           }
         }
-      };
-      baseController.base(baseHandler);
+      } catch (error) {
+        const responseObject = response.error(error.message);
+        res.status(200).json(responseObject);
+      }
     }
   });
 };
@@ -73,11 +76,10 @@ const create = async (req, res) => {
 // ### list of all Customers in the collection ###
 
 const customersList = async (req, res) => {
-  const baseHandler = async () => {
+  try {
     const { page = 1, limit = 10, customerId } = req.body;
     if (customerId === null || customerId === "") {
-      const result = await CustomerModel
-        .find({})
+      const result = await CustomerModel.find({})
         .select(requiredFields.customerFields)
         .limit(limit * 1)
         .skip((page - 1) * limit);
@@ -95,9 +97,9 @@ const customersList = async (req, res) => {
         res.status(200).json(responseObject);
       }
     } else {
-      const result = await CustomerModel
-        .find(query.findCustomer(req.body.customerId))
-        .select(requiredFields.customerFields);
+      const result = await CustomerModel.find(
+        query.findCustomer(req.body.customerId)
+      ).select(requiredFields.customerFields);
       if (result.length !== 0) {
         const responseObject = response.success(
           messageResponse.getOne("customer"),
@@ -111,14 +113,16 @@ const customersList = async (req, res) => {
         res.status(200).json(responseObject);
       }
     }
-  };
-  baseController.base(baseHandler);
+  } catch (error) {
+    const responseObject = response.error(error.message);
+    res.status(200).json(responseObject);
+  }
 };
 
 // ### search customers using customerId in the collection ###
 
 const customersDetail = async (req, res) => {
-  const baseHandler = async () => {
+  try {
     const result = await CustomerModel.find(
       query.findCustomer(req.body.customerId)
     );
@@ -134,8 +138,10 @@ const customersDetail = async (req, res) => {
       );
       res.status(200).json(responseObject);
     }
-  };
-  baseController.base(baseHandler);
+  } catch (error) {
+    const responseObject = response.error(error.message);
+    res.status(200).json(responseObject);
+  }
 };
 
 module.exports = {
