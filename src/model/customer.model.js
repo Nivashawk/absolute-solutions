@@ -6,6 +6,11 @@ const customerSchema = mongoose.Schema({
   customerId: {
     type: String,
     require: true,
+    validate(value){
+      if (!validator(value)) {
+          throw new Error("customerId is invalid");
+      }
+  }
   },
   name: {
     type: String,

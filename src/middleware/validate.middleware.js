@@ -5,6 +5,7 @@ const validator = require("../helper/validate.helper");
 
 const baseValidator = (paramType,validationRule,res, next) => {
   validator(paramType, validationRule, {}, (err, status) => {
+    console.log(Object.keys(err).length);
     if (!status) {
       res.status(200).send({
         code: 201,
